@@ -1,4 +1,4 @@
-package main
+package romandateandtime
 
 import (
 	"fmt"
@@ -36,7 +36,7 @@ func buildromanyear() map[int]RomanMonth {
 	return ry
 }
 
-func getymd(t time.Time) (int, time.Month, int) {
+func GetYMD(t time.Time) (int, time.Month, int) {
 	y := t.Year()
 	m := t.Month()
 	d := t.Day()
@@ -65,7 +65,7 @@ func testdates() {
 		Lon: LATITUDE,
 	}
 	fmt.Println(time.Now())
-	fmt.Println(lengthofday(DefaultPT))
+	fmt.Println(LengthOfDay(DefaultPT))
 	fmt.Println(GetRomanDate(time.Now()))
 	fmt.Println(whichhour(DefaultPT))
 	fmt.Println(GetRomanDateAndTime(DefaultPT))

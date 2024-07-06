@@ -1,4 +1,4 @@
-package main
+package romandateandtime
 
 import (
 	"fmt"
@@ -22,7 +22,7 @@ func GetRomanTime(p PlaceAndTime) string {
 
 func GetRomanDate(t time.Time) string {
 	// pridie Nonas Quinctilis MMXXIV
-	y, m, d := getymd(t)
+	y, m, d := GetYMD(t)
 
 	leap := false
 	if y%400 == 0 || (y%100 != 0 && y%4 == 0) {

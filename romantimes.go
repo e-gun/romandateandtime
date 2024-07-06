@@ -1,4 +1,4 @@
-package main
+package romandateandtime
 
 import (
 	"fmt"
@@ -28,19 +28,19 @@ type PlaceAndTime struct {
 	Lon float64
 }
 
-func lengthofday(p PlaceAndTime) time.Duration {
+func LengthOfDay(p PlaceAndTime) time.Duration {
 	// rise  - 2024-07-06 09:43:02 +0000 UTC
 	// set   - 2024-07-07 01:01:18 +0000 UTC
 	// light - 15h18m16s
 
-	y, m, d := getymd(p.T)
+	y, m, d := GetYMD(p.T)
 	rise, set := sunrise.SunriseSunset(p.Lat, p.Lon, y, m, d)
 
 	daylight := set.Sub(rise)
 	return daylight
 }
 
-func lengthofdaytimehour(daylight time.Duration) time.Duration {
+func LengthOfDaytimeHour(daylight time.Duration) time.Duration {
 	// 15h18m16s --> 1h16m31.333333333s
 	return daylight / 12
 }
@@ -59,7 +59,7 @@ func isitnight(p PlaceAndTime) bool {
 	}
 
 	t := p.T.In(zone)
-	y, m, d := getymd(t)
+	y, m, d := GetYMD(t)
 	rise, set := sunrise.SunriseSunset(p.Lat, p.Lon, y, m, d)
 
 	//fmt.Println(set.In(zone))
@@ -81,8 +81,8 @@ func whichhour(p PlaceAndTime) int {
 }
 
 func whichdaytimehour(p PlaceAndTime) int {
-	y, m, d := getymd(p.T)
-	dur := lengthofdaytimehour(lengthofday(p))
+	y, m, d := GetYMD(p.T)
+	dur := LengthOfDaytimeHour(LengthOfDay(p))
 	threshold, _ := sunrise.SunriseSunset(p.Lat, p.Lon, y, m, d)
 	since := p.T.Sub(threshold)
 	hour := since / dur
@@ -91,9 +91,9 @@ func whichdaytimehour(p PlaceAndTime) int {
 }
 
 func whichnightimehour(p PlaceAndTime) int {
-	y, m, d := getymd(p.T)
+	y, m, d := GetYMD(p.T)
 
-	dur := lengthofnighttimehour(lengthofday(p))
+	dur := lengthofnighttimehour(LengthOfDay(p))
 	_, setstoday := sunrise.SunriseSunset(p.Lat, p.Lon, y, m, d)
 	_, setyesterday := sunrise.SunriseSunset(p.Lat, p.Lon, y, m, d-1)
 

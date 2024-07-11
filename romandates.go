@@ -3,6 +3,7 @@ package romandateandtime
 import (
 	"fmt"
 	"os"
+	"strings"
 	"time"
 )
 
@@ -17,6 +18,64 @@ type RomanMonth struct {
 var (
 	RomanYear = buildromanyear()
 )
+
+func getromandate(t time.Time) string {
+	// pridie Nonas Quinctilis MMXXIV
+	y, m, d := GetYMD(t)
+
+	leap := false
+	if y%400 == 0 || (y%100 != 0 && y%4 == 0) {
+		leap = true
+	}
+
+	rm := RomanYear[int(m)]
+
+	postides := func(d int) string {
+		var rd string
+		var ante int
+		if leap && m == time.February && d == 24 {
+			ante = rm.Days - (d - 2)
+			if d == 25 {
+				rd = "bis-"
+			}
+		} else {
+			ante = rm.Days - (d - 1)
+		}
+
+		if ante > 1 {
+			rd += "a. d. " + strings.ToLower(integerToRoman(ante))
+		} else if ante == 1 {
+			rd += "pridie Kalendas"
+		} else {
+			// do nothing
+		}
+		return rd
+	}
+
+	// walk through the month ...
+	var rd string
+	if d == 1 {
+		rd = "Kalendis"
+	} else if d < rm.Nones-1 {
+		an := rm.Nones - (d - 1)
+		rd = fmt.Sprintf("a. d. %s Nonas", strings.ToLower(integerToRoman(an)))
+	} else if d == rm.Nones-1 {
+		rd = "pridie Nonas"
+	} else if d == rm.Nones {
+		rd = "Nonis"
+	} else if d < rm.Ides-1 {
+		an := rm.Ides - (d - 1)
+		rd = fmt.Sprintf("a. d. %s Idus", strings.ToLower(integerToRoman(an)))
+	} else if d == rm.Ides-1 {
+		rd = "pridie Idus"
+	} else if d == rm.Ides {
+		rd = "Idibus"
+	} else {
+		rd = postides(d)
+	}
+
+	return rd + " " + rm.Name + " " + integerToRoman(y)
+}
 
 func buildromanyear() map[int]RomanMonth {
 	ry := map[int]RomanMonth{
@@ -65,12 +124,12 @@ func testdates() {
 		Lon: LATITUDE,
 	}
 	fmt.Println(time.Now())
-	fmt.Println(LengthOfDay(DefaultPT))
-	fmt.Println(GetRomanDate(time.Now()))
+	fmt.Println(lengthofday(DefaultPT))
+	fmt.Println(getromandate(time.Now()))
 	fmt.Println(whichhour(DefaultPT))
-	fmt.Println(GetRomanDateAndTime(DefaultPT))
+	fmt.Println(DefaultPT.GetRomanDateAndTime())
 
 	fmt.Println(tt)
 	fmt.Println(whichhour(pt))
-	fmt.Println(GetRomanDateAndTime(DefaultPT))
+	fmt.Println(pt.GetRomanDateAndTime())
 }

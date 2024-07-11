@@ -8,7 +8,7 @@ import rdt "github.com/e-gun/romandateandtime"
 	pt.Lat = LATITUDE
 	pt.Lon = LONGITUDE
 	
-    fmt.Println(rdt.GetRomanDateAndTime(pt))
+    fmt.Println(pt.GetRomanDateAndTime())
 
 ```
 

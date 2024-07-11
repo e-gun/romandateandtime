@@ -48,6 +48,6 @@ func main() {
 	}
 
 	fmt.Println("romandateandtime...")
-	fmt.Println(pt.T)
-	fmt.Println(GetRomanDateAndTime(pt))
+	// fmt.Println(pt.T)
+	fmt.Println(pt.GetRomanDateAndTime())
 }

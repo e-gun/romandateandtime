@@ -8,27 +8,16 @@ import (
 	"time"
 )
 
-const (
-	LATITUDE  = 43.65
-	LONGITUDE = -79.38
-)
-
-var (
-	TimeZone  = "America/New_York"
-	DefaultPT = PlaceAndTime{
-		T:   time.Now(),
-		Lat: LATITUDE,
-		Lon: LONGITUDE,
+func getromantime(p PlaceAndTime) string {
+	// hora VII
+	rh := fmt.Sprintf("hora %s", integerToRoman(whichhour(p)))
+	if isitnight(p) {
+		rh += " noctis"
 	}
-)
-
-type PlaceAndTime struct {
-	T   time.Time
-	Lat float64
-	Lon float64
+	return rh
 }
 
-func LengthOfDay(p PlaceAndTime) time.Duration {
+func lengthofday(p PlaceAndTime) time.Duration {
 	// rise  - 2024-07-06 09:43:02 +0000 UTC
 	// set   - 2024-07-07 01:01:18 +0000 UTC
 	// light - 15h18m16s
@@ -40,7 +29,7 @@ func LengthOfDay(p PlaceAndTime) time.Duration {
 	return daylight
 }
 
-func LengthOfDaytimeHour(daylight time.Duration) time.Duration {
+func lengthofdaytimehour(daylight time.Duration) time.Duration {
 	// 15h18m16s --> 1h16m31.333333333s
 	return daylight / 12
 }
@@ -82,7 +71,7 @@ func whichhour(p PlaceAndTime) int {
 
 func whichdaytimehour(p PlaceAndTime) int {
 	y, m, d := GetYMD(p.T)
-	dur := LengthOfDaytimeHour(LengthOfDay(p))
+	dur := lengthofdaytimehour(lengthofday(p))
 	threshold, _ := sunrise.SunriseSunset(p.Lat, p.Lon, y, m, d)
 	since := p.T.Sub(threshold)
 	hour := since / dur
@@ -93,7 +82,7 @@ func whichdaytimehour(p PlaceAndTime) int {
 func whichnightimehour(p PlaceAndTime) int {
 	y, m, d := GetYMD(p.T)
 
-	dur := lengthofnighttimehour(LengthOfDay(p))
+	dur := lengthofnighttimehour(lengthofday(p))
 	_, setstoday := sunrise.SunriseSunset(p.Lat, p.Lon, y, m, d)
 	_, setyesterday := sunrise.SunriseSunset(p.Lat, p.Lon, y, m, d-1)
 

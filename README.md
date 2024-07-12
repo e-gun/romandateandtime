@@ -8,6 +8,8 @@ import rdt "github.com/e-gun/romandateandtime"
 	pt.Lat = LATITUDE
 	pt.Lon = LONGITUDE
 	
+	rdt.Timezone = "America/New_York"
+	
     fmt.Println(pt.GetRomanDateAndTime())
 
 ```

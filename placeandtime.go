@@ -10,8 +10,8 @@ const (
 )
 
 var (
-	TimeZone  = "America/New_York"
-	DefaultPT = PlaceAndTime{
+	DefaultTimeZone = "America/New_York"
+	DefaultPT       = PlaceAndTime{
 		T:   time.Now(),
 		Lat: LATITUDE,
 		Lon: LONGITUDE,
@@ -22,6 +22,7 @@ type PlaceAndTime struct {
 	T   time.Time
 	Lat float64
 	Lon float64
+	TZ  string // e.g., "America/New_York"
 }
 
 func (p *PlaceAndTime) GetRomanDateAndTime() string {

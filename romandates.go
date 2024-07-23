@@ -112,7 +112,7 @@ func testdates() {
 	// 12
 	// hora XII noctis a. d. iv Nonas Quinctilis MMXXIV
 
-	zone, err := time.LoadLocation(TimeZone)
+	zone, err := time.LoadLocation(DefaultTimeZone)
 	if err != nil {
 		fmt.Println(err)
 		os.Exit(1)

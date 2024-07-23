@@ -41,7 +41,11 @@ func lengthofnighttimehour(daylight time.Duration) time.Duration {
 }
 
 func isitnight(p PlaceAndTime) bool {
-	zone, err := time.LoadLocation(TimeZone)
+	if p.TZ == "" {
+		p.TZ = DefaultTimeZone
+	}
+
+	zone, err := time.LoadLocation(p.TZ)
 	if err != nil {
 		fmt.Println(err)
 		os.Exit(1)

@@ -49,6 +49,20 @@ func (p *PlaceAndTime) GetLenOfDaytimeHour() time.Duration {
 // GetRTRemainder - how much time is left in this Roman hour before the next hour arrives
 func (p *PlaceAndTime) GetRTRemainder() time.Duration {
 	// 22m26s
+	elapsed := p.GetRTElapsed()
+	var h time.Duration
+	if isitnight(*p) {
+		h = lengthofnighttimehour(lengthofday(*p))
+	} else {
+		h = lengthofdaytimehour(lengthofday(*p))
+	}
+	left := h - elapsed
+	return left
+}
+
+// GetRTElapsed - how much time has passed in this Roman hour
+func (p *PlaceAndTime) GetRTElapsed() time.Duration {
+	// 22m26s
 	var h time.Duration
 	var r float64
 	if isitnight(*p) {
@@ -60,6 +74,5 @@ func (p *PlaceAndTime) GetRTRemainder() time.Duration {
 	}
 
 	elapsed := h.Seconds() * r
-	left := h.Seconds() - elapsed
-	return time.Duration(left) * time.Second
+	return time.Duration(elapsed) * time.Second
 }

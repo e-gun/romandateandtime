@@ -73,17 +73,15 @@ func whichhour(p PlaceAndTime) int {
 	}
 }
 
-func whichdaytimehour(p PlaceAndTime) int {
+func daytimesinceandduration(p PlaceAndTime) (time.Duration, time.Duration) {
 	y, m, d := GetYMD(p.T)
 	dur := lengthofdaytimehour(lengthofday(p))
 	threshold, _ := sunrise.SunriseSunset(p.Lat, p.Lon, y, m, d)
 	since := p.T.Sub(threshold)
-	hour := since / dur
-
-	return int(hour) + 1
+	return since, dur
 }
 
-func whichnightimehour(p PlaceAndTime) int {
+func nighttimesinceandduration(p PlaceAndTime) (time.Duration, time.Duration) {
 	y, m, d := GetYMD(p.T)
 
 	dur := lengthofnighttimehour(lengthofday(p))
@@ -98,6 +96,29 @@ func whichnightimehour(p PlaceAndTime) int {
 	}
 
 	since := p.T.Sub(threshold)
+	return since, dur
+}
+
+func whichdaytimehour(p PlaceAndTime) int {
+	since, dur := daytimesinceandduration(p)
+	hour := since / dur
+	return int(hour) + 1
+}
+
+func daytimehourremainder(p PlaceAndTime) float64 {
+	since, dur := daytimesinceandduration(p)
+	hour := since / dur
+	return float64(float64(hour) - float64(int(hour)))
+}
+
+func whichnightimehour(p PlaceAndTime) int {
+	since, dur := nighttimesinceandduration(p)
 	hour := since / dur
 	return int(math.Abs(float64(hour))) + 1
+}
+
+func nighttimehourremainder(p PlaceAndTime) float64 {
+	since, dur := nighttimesinceandduration(p)
+	hour := since / dur
+	return float64(float64(hour) - float64(int(hour)))
 }

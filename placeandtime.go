@@ -44,3 +44,18 @@ func (p *PlaceAndTime) GetLenOfDaytimeHour() time.Duration {
 	// 1h16m1.583333333s
 	return lengthofdaytimehour(lengthofday(*p))
 }
+
+func (p *PlaceAndTime) GetRTRemainder() time.Duration {
+	var h time.Duration
+	var r float64
+	if isitnight(*p) {
+		h = lengthofnighttimehour(lengthofday(*p))
+		r = nighttimehourremainder(*p)
+	} else {
+		h = lengthofdaytimehour(lengthofday(*p))
+		r = daytimehourremainder(*p)
+	}
+	scaled := h.Seconds() / 3600
+	fract := scaled * r
+	return time.Duration(fract) * time.Second
+}

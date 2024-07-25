@@ -10,11 +10,34 @@ import (
 
 func getromantime(p PlaceAndTime) string {
 	// hora VII
+
+	if lengthofday(p) == 24*time.Hour {
+		return undef(p)
+	}
+
 	rh := fmt.Sprintf("hora %s", integerToRoman(whichhour(p)))
 	if isitnight(p) {
 		rh += " noctis"
 	}
 	return rh
+}
+
+// undef - the day was 24 hours long; so there are no roman hours
+func undef(p PlaceAndTime) string {
+	season := "summer"
+	if p.T.Month() < 4 || p.T.Month() > 9 {
+		season = "winter"
+	}
+
+	if p.Lat > 0 && season == "winter" {
+		return "(hodie hoc loco solis ortum deest)"
+	} else if p.Lat < 0 && season == "winter" {
+		return "(hodie hoc loco solis occasum deest)"
+	} else if p.Lon > 0 {
+		return "(hodie hoc loco solis occasum deest)"
+	} else {
+		return "(hodie hoc loco solis ortum deest)"
+	}
 }
 
 func lengthofday(p PlaceAndTime) time.Duration {
@@ -24,6 +47,22 @@ func lengthofday(p PlaceAndTime) time.Duration {
 
 	y, m, d := GetYMD(p.T)
 	rise, set := sunrise.SunriseSunset(p.Lat, p.Lon, y, m, d)
+
+	// 45 minutes of darkness...
+
+	// rise, set := sunrise.SunriseSunset(
+	//		69.6, -82.89,
+	//		2024, time.July, 25, // 2000-01-01
+	//	)
+	// rise: 2024-07-25 05:56:22 +0000 UTC     set: 2024-07-26 05:19:30 +0000 UTC
+
+	// if the sun is up all day you get
+	// rise: 0001-01-01 00:00:00 +0000 UTC     set: 0001-01-01 00:00:00 +0000 UTC
+
+	if set == rise {
+		// we actually lost the ability to answer the isitnight() question...
+		return 24 * time.Hour
+	}
 
 	daylight := set.Sub(rise)
 	return daylight

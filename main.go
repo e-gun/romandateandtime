@@ -20,6 +20,7 @@ func main() {
 
 	args := os.Args[1:len(os.Args)]
 	pt := DefaultPT
+	pt.T = time.Now()
 
 	for i, a := range args {
 		switch a {
@@ -47,14 +48,6 @@ func main() {
 		}
 	}
 
-	fmt.Println("romandateandtime...")
-	fmt.Println("Toronto")
 	fmt.Println(pt.GetRomanDateAndTime())
 
-	fmt.Println("Miami")
-	pt.Lat = 25.77
-	pt.Lon = -80.19
-	pt.TZ = "America/New_York"
-	fmt.Println(pt.GetRomanDateAndTime())
-	fmt.Println(pt.GetRTRemainder())
 }

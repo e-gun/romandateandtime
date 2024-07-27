@@ -72,6 +72,8 @@ func getromandate(t time.Time) string {
 		rd = "Idibus"
 	} else {
 		rd = postides(d)
+		// need name of next month, not this month
+		rm.Name = RomanYear[int(m+1)].Name
 	}
 
 	return rd + " " + rm.Name + " " + integerToRoman(y)
@@ -91,6 +93,7 @@ func buildromanyear() map[int]RomanMonth {
 		10: {"Octobris", "Oct.", 31, 7, 15},
 		11: {"Novembris", "Nov.", 30, 5, 13},
 		12: {"Decembris", "Dec.", 31, 5, 13},
+		13: {"Ianuarias", "Ian.", 31, 5, 13},
 	}
 	return ry
 }

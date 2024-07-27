@@ -94,9 +94,6 @@ func isitnight(p PlaceAndTime) bool {
 	y, m, d := GetYMD(t)
 	rise, set := sunrise.SunriseSunset(p.Lat, p.Lon, y, m, d)
 
-	//fmt.Println(set.In(zone))
-	//fmt.Println(rise.In(zone))
-
 	if t.After(set) || t.Before(rise) {
 		return true
 	} else {

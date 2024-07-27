@@ -79,3 +79,7 @@ func (p *PlaceAndTime) GetRTElapsed() time.Duration {
 	elapsed := h.Seconds() * r
 	return time.Duration(elapsed) * time.Second
 }
+
+func (p *PlaceAndTime) GetArabicHour() int {
+	return whichhour(*p)
+}

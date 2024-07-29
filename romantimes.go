@@ -34,9 +34,9 @@ func undef(p PlaceAndTime) string {
 	} else if p.Lat < 0 && season == "winter" {
 		return "(hodie hoc loco solis occasum deest)"
 	} else if p.Lon > 0 {
-		return "(hodie hoc loco solis occasum deest)"
-	} else {
 		return "(hodie hoc loco solis ortum deest)"
+	} else {
+		return "(hodie hoc loco solis occasum deest)"
 	}
 }
 
